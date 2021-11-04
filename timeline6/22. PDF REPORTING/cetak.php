@@ -1,17 +1,13 @@
 <?php
 require_once __DIR__ . '/vendor/autoload.php';
 // reference the Dompdf namespace
-// use Dompdf\Dompdf;
+use Dompdf\Dompdf;
+use Mpdf\Mpdf;
 
 require 'functions.php';
 $mahasiswa = query("SELECT * FROM mahasiswa");
 
-$mpdf = new \Mpdf\Mpdf([
-    'mode' => 'utf-8',
-    'debug' => true,
-    'allow_output_buffering' => true,
-    'tempDir' => __DIR__ . '/custom/temp/dir/path'
-]);
+$mpdf = new Mpdf();
 
 $html = '<!DOCTYPE html>
 <html lang="en">
@@ -50,17 +46,13 @@ $html .= '</table>
 $mpdf->showImageErrors = true;
 $mpdf->WriteHTML($html);
 $mpdf->Output('daftar-mahasiswa.pdf', 'I');
-exit;
 
 // // instantiate and use the dompdf class
 // $dompdf = new Dompdf();
 // $dompdf->loadHtml($html);
 
-// // (Optional) Setup the paper size and orientation
-// $dompdf->setPaper('A4', 'landscape');
+// Render the HTML as PDF
+$dompdf->render();
 
-// // Render the HTML as PDF
-// $dompdf->render();
-
-// // Output the generated PDF to Browser
-// $dompdf->stream();
+// Output the generated PDF to Browser
+// $dompdf->stream('daftar-mahasiswa.pdf');
